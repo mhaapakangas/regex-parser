@@ -7,3 +7,5 @@ with the implementation yet.
 
 The plan is to next implement logic for converting the input into the postfix
 notation. After that I can start constructing the algorithm itself.
+
+**Time spent:** 3 h
