@@ -1,4 +1,4 @@
-#Regular expression parser
+# Regular expression parser
 
 Project for Data structures and algorithms -course.
 
