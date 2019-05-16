@@ -4,8 +4,22 @@ package parser;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+/**
+ * Provides functions to convert a regular expression into a postfix notation
+ * containing concatenation characters.
+ */
 public class InputConverter {
 
+    /**
+     * Converts the regular expression into a postfix notation.
+     *
+     * The conversion uses the following rules for operator precedence:
+     * Kleene star has the highest precedence, followed by the concatenation operator.
+     * The pipe has the lowest precedence.
+     *
+     * @param input the regex with concatenation characters
+     * @return the regex in postfix notation
+     */
     public static String toPostfixNotation(String input) {
         Deque<Character> operatorStack = new ArrayDeque<>();
         String output = "";
@@ -54,30 +68,39 @@ public class InputConverter {
     }
 
     private static boolean isOperatorOneOf(char[] chars, char operator) {
-        for (char c: chars) {
+        for (char c : chars) {
             if (operator == c) {
                 return true;
             }
         }
-
         return false;
     }
 
+    /**
+     * Adds concatenation characters to the regular expression.
+     *
+     * Concatenation character '.' marks that two expressions should be concatenated.
+     * It is added after each character of the input that is not an opening parenthesis
+     * or a pipe, and that is not followed by a closing parenthesis, a pipe or a Kleene star.
+     *
+     * @param input the regex
+     * @return the regex with concatenation characters
+     */
     public static String addConcatenationChar(String input) {
         String output = "";
-        for (int i = 0; i < input.length(); i++) {
-            char ch = input.charAt(i);
-            output += ch;
-            if (ch == '(' || ch == '|') {
+        for (int i = 0; i < input.length() - 1; i++) {
+            char c = input.charAt(i);
+            output += c;
+            if (c == '(' || c == '|') {
                 continue;
             }
-            if (i < input.length() - 1) {
-                char nextChar = input.charAt(i + 1);
-                if (nextChar != ')' && nextChar != '|' && nextChar != '*') {
-                    output += '.';
-                }
+
+            char nextChar = input.charAt(i + 1);
+            if (nextChar != ')' && nextChar != '|' && nextChar != '*') {
+                output += '.';
             }
         }
+        output += input.charAt(input.length() - 1);
         return output;
     }
 }
