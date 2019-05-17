@@ -9,3 +9,5 @@ Project for Data structures and algorithms -course.
 ### Progress reports
 
 [Week 1](documentation/report-week-1.md)
+
+[Week 2](documentation/report-week-2.md)
