@@ -50,6 +50,11 @@ public class InputConverterTest {
     }
 
     @Test
+    public void addConcatenationChar10() {
+        Assert.assertEquals("", InputConverter.addConcatenationChar(""));
+    }
+
+    @Test
     public void toPostfixNotation1() {
         Assert.assertEquals("ab.c.", InputConverter.toPostfixNotation("a.b.c"));
     }
@@ -92,5 +97,10 @@ public class InputConverterTest {
     @Test
     public void toPostfixNotation9() {
         Assert.assertEquals("abcd.*.*.e.", InputConverter.toPostfixNotation("a.(b.(c.d)*)*.e"));
+    }
+
+    @Test
+    public void toPostfixNotation10() {
+        Assert.assertEquals("", InputConverter.toPostfixNotation(""));
     }
 }

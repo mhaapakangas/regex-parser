@@ -87,6 +87,10 @@ public class InputConverter {
      * @return the regex with concatenation characters
      */
     public static String addConcatenationChar(String input) {
+        if (input.isEmpty()) {
+            return "";
+        }
+
         String output = "";
         for (int i = 0; i < input.length() - 1; i++) {
             char c = input.charAt(i);
