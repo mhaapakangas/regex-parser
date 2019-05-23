@@ -13,15 +13,7 @@ public class NFA {
         return start;
     }
 
-    public void setStart(State start) {
-        this.start = start;
-    }
-
     public State getEnd() {
         return end;
-    }
-
-    public void setEnd(State end) {
-        this.end = end;
     }
 }
