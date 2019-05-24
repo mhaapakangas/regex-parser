@@ -1,4 +1,5 @@
 import matcher.RegexMatcher;
+import models.NFA;
 import parser.InputConverter;
 import parser.NFABuilder;
 
@@ -10,11 +11,18 @@ public class Main {
         System.out.println("Enter regex: ");
         String regex = scanner.nextLine();
         String prepared = InputConverter.addConcatenationChar(regex);
-        String postfix = InputConverter.toPostfixNotation(prepared);
+        NFA nfa = NFABuilder.buildNFA(InputConverter.toPostfixNotation(prepared));
 
-        System.out.println("Enter string to match: ");
-        String input = scanner.nextLine();
-        boolean result = RegexMatcher.match(NFABuilder.buildNFA(postfix), input);
-        System.out.println("result: " + result);
+        while (true) {
+            System.out.println("\nEnter a string to match, or 'quit' to exit the program.");
+            String input = scanner.nextLine();
+            if ("quit".equals(input)) {
+                break;
+            }
+
+            boolean result = RegexMatcher.match(nfa, input);
+            System.out.println("is a match: " + result);
+        }
+
     }
 }
