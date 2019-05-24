@@ -1,5 +1,7 @@
 package parser;
 
+import java.util.Arrays;
+
 /**
  * Represents a state of a NFA.
  * There are two possible kinds of transitions between states: symbol transitions
@@ -62,5 +64,9 @@ public class State {
         } else {
             this.epsilonTransitions[1] = epsilonTransition;
         }
+    }
+
+    public boolean hasEpsilonTransition() {
+        return this.epsilonTransitions[0] != null;
     }
 }
