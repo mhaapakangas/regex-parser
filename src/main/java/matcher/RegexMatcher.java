@@ -1,7 +1,7 @@
 package matcher;
 
-import parser.NFA;
-import parser.State;
+import models.NFA;
+import models.State;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,5 +1,8 @@
 package parser;
 
+import models.NFA;
+import models.State;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 

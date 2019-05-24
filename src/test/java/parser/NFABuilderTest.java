@@ -1,5 +1,7 @@
 package parser;
 
+import models.NFA;
+import models.State;
 import org.junit.Assert;
 import org.junit.Test;
 

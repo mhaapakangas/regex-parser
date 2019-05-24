@@ -2,7 +2,7 @@ package matcher;
 
 import org.junit.Assert;
 import org.junit.Test;
-import parser.NFA;
+import models.NFA;
 import parser.NFABuilder;
 
 public class RegexMatcherTest {

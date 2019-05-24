@@ -1,4 +1,4 @@
-package parser;
+package models;
 
 /**
  * Represents a nondeterministic finite automaton (NFA). Only has references

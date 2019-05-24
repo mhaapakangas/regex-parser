@@ -1,6 +1,4 @@
-package parser;
-
-import java.util.Arrays;
+package models;
 
 /**
  * Represents a state of a NFA.
