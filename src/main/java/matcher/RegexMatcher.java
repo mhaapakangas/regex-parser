@@ -13,6 +13,8 @@ public class RegexMatcher {
 
     /**
      * Checks if the given input matches the regular expression.
+     * The algorithm keeps track of all possible paths in the NFA simultaneously
+     * so that there is no backtracking.
      *
      * @param nfa NFA representing the regex
      * @param input text to match

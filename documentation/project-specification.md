@@ -18,7 +18,7 @@ to the end node for a provided text input, then it matches the regular expressio
 
 ## Usage
 User gives two inputs: the regular expression and the text to match against. The output
-of the program will be a list of matches in the given text.
+of the program will be a boolean showing if the text matches exactly the regex.
 
 ## Complexity
 
