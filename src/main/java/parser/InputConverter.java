@@ -1,8 +1,6 @@
 package parser;
 
-
-import java.util.ArrayDeque;
-import java.util.Deque;
+import datastructures.Stack;
 
 /**
  * Provides functions to convert a regular expression into a postfix notation
@@ -21,7 +19,7 @@ public class InputConverter {
      * @return the regex in postfix notation
      */
     public static String toPostfixNotation(String input) {
-        Deque<Character> operatorStack = new ArrayDeque<>();
+        Stack<Character> operatorStack = new Stack<>();
         String output = "";
 
         for (char c : input.toCharArray()) {

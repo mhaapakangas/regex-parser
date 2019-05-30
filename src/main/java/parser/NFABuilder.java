@@ -1,10 +1,8 @@
 package parser;
 
+import datastructures.Stack;
 import models.NFA;
 import models.State;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 /**
  * Provides functions to build a NFA from a regular expression in postfix notation.
@@ -22,7 +20,7 @@ public class NFABuilder {
             return createEpsilonNFA();
         }
 
-        Deque<NFA> stack = new ArrayDeque<>();
+        Stack<NFA> stack = new Stack<>();
         for (char c : regex.toCharArray()) {
             switch (c) {
                 case '*':
