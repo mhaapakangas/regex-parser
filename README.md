@@ -5,6 +5,8 @@ Project for Data structures and algorithms -course.
 ## Documentation
 
 ### [Project specification](documentation/project-specification.md)
+### [Implementation document](documentation/implementation.md)
+### [Testing document](documentation/testing.md)
 
 ### Progress reports
 
@@ -13,6 +15,8 @@ Project for Data structures and algorithms -course.
 [Week 2](documentation/report-week-2.md)
 
 [Week 3](documentation/report-week-3.md)
+
+[Week 4](documentation/report-week-4.md)
 
 ### Instructions
 
