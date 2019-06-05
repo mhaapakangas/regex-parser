@@ -13,16 +13,11 @@ public class Main {
         String prepared = InputConverter.addConcatenationChar(regex);
         NFA nfa = NFABuilder.buildNFA(InputConverter.toPostfixNotation(prepared));
 
-        while (true) {
-            System.out.println("\nEnter a string to match, or 'quit' to exit the program.");
-            String input = scanner.nextLine();
-            if ("quit".equals(input)) {
-                break;
-            }
+        System.out.println("\nEnter a string to match: ");
+        String input = scanner.nextLine();
 
-            boolean result = RegexMatcher.match(nfa, input);
-            System.out.println("is a match: " + result);
-        }
+        boolean result = RegexMatcher.match(nfa, input);
+        System.out.println("\nis a match: " + result);
 
     }
 }
