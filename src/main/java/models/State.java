@@ -7,7 +7,7 @@ package models;
  * epsilon transitions.
  */
 public class State {
-    private int lastListId;
+    private int lastStackId;
     private boolean isEnd;
     private State transition;
     private Character symbol;
@@ -70,18 +70,18 @@ public class State {
     }
 
     /**
-     * Returns the ID of the last list that this state has been added to
-     * @return the ID of the list
+     * Returns the ID of the last stack that this state has been added to
+     * @return the ID of the stack
      */
-    public int getLastListId() {
-        return lastListId;
+    public int getLastStackId() {
+        return lastStackId;
     }
 
     /**
-     * Set the ID of the last list that this state has been added to
-     * @param lastListId ID of the list
+     * Set the ID of the last stack that this state has been added to
+     * @param lastStackId ID of the stack
      */
-    public void setLastListId(int lastListId) {
-        this.lastListId = lastListId;
+    public void setLastStackId(int lastStackId) {
+        this.lastStackId = lastStackId;
     }
 }

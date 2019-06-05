@@ -1,10 +1,8 @@
 package matcher;
 
+import datastructures.Stack;
 import models.NFA;
 import models.State;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Provides functions to check if a text matches a regular expression.
@@ -21,37 +19,53 @@ public class RegexMatcher {
      * @return true if the input is an exact match, otherwise false
      */
     public static boolean match(NFA nfa, String input) {
-        int listId = 1;
-        List<State> states = new ArrayList<>();
-        findNextStates(nfa.getStart(), states, listId);
+        int stackId = 1;
+        Stack<State> states = new Stack<>();
+        addNextStatesToStack(nfa.getStart(), states, stackId);
 
         for (char c : input.toCharArray()) {
-            List<State> nextStates = new ArrayList<>();
-            listId++;
+            Stack<State> nextStates = new Stack<>();
+            stackId++;
 
-            for (State state : states) {
+            while (states.peek() != null) {
+                State state = states.pop();
                 if (state.getSymbol() != null && state.getSymbol() == c) {
-                    findNextStates(state.getTransition(), nextStates, listId);
+                    addNextStatesToStack(state.getTransition(), nextStates, stackId);
                 }
             }
             states = nextStates;
         }
 
-        return states.stream().anyMatch(State::isEnd);
+        while (states.peek() != null) {
+            State state = states.pop();
+            if (state.isEnd()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private static void findNextStates(State state, List<State> nextStates, int listId) {
+    /**
+     * Find next states from the given one following the epsilon transitions as far as possible, and add them to the stack.
+     * If a state has already been added to the current stack (stackId equals lastStackId) then it is ignored.
+     *
+     * @param state starting state
+     * @param stack stack where the states should be added
+     * @param stackId ID of the current stack
+     */
+    private static void addNextStatesToStack(State state, Stack<State> stack, int stackId) {
         if (!state.hasEpsilonTransition()) {
-            if (listId == state.getLastListId()) {
+            if (stackId == state.getLastStackId()) {
                 return;
             }
-            state.setLastListId(listId);
-            nextStates.add(state);
+            state.setLastStackId(stackId);
+            stack.push(state);
         } else {
             for (int i = 0; i < 2; i++) {
                 State next = state.getEpsilonTransitions()[i];
                 if (next != null) {
-                    findNextStates(next, nextStates, listId);
+                    addNextStatesToStack(next, stack, stackId);
                 }
             }
         }
