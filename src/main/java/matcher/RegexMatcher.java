@@ -3,8 +3,8 @@ package matcher;
 import models.NFA;
 import models.State;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides functions to check if a text matches a regular expression.
@@ -21,15 +21,17 @@ public class RegexMatcher {
      * @return true if the input is an exact match, otherwise false
      */
     public static boolean match(NFA nfa, String input) {
-        Set<State> states = new HashSet<>();
-        findNextStates(nfa.getStart(), states);
+        int listId = 1;
+        List<State> states = new ArrayList<>();
+        findNextStates(nfa.getStart(), states, listId);
 
         for (char c : input.toCharArray()) {
-            Set<State> nextStates = new HashSet<>();
+            List<State> nextStates = new ArrayList<>();
+            listId++;
 
             for (State state : states) {
                 if (state.getSymbol() != null && state.getSymbol() == c) {
-                    findNextStates(state.getTransition(), nextStates);
+                    findNextStates(state.getTransition(), nextStates, listId);
                 }
             }
             states = nextStates;
@@ -38,14 +40,18 @@ public class RegexMatcher {
         return states.stream().anyMatch(State::isEnd);
     }
 
-    private static void findNextStates(State state, Set<State> nextStates) {
+    private static void findNextStates(State state, List<State> nextStates, int listId) {
         if (!state.hasEpsilonTransition()) {
+            if (listId == state.getLastListId()) {
+                return;
+            }
+            state.setLastListId(listId);
             nextStates.add(state);
         } else {
             for (int i = 0; i < 2; i++) {
                 State next = state.getEpsilonTransitions()[i];
                 if (next != null) {
-                    findNextStates(next, nextStates);
+                    findNextStates(next, nextStates, listId);
                 }
             }
         }
