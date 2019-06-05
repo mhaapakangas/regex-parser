@@ -36,13 +36,16 @@ public class RegexMatcher {
             states = nextStates;
         }
 
+        return containsEndState(states);
+    }
+
+    private static boolean containsEndState(Stack<State> states) {
         while (states.peek() != null) {
             State state = states.pop();
             if (state.isEnd()) {
                 return true;
             }
         }
-
         return false;
     }
 
