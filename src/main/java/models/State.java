@@ -8,6 +8,7 @@ package models;
  */
 public class State {
     private int lastStackId;
+    private int lastVisitedId;
     private boolean isEnd;
     private State transition;
     private Character symbol;
@@ -71,17 +72,33 @@ public class State {
 
     /**
      * Returns the ID of the last stack that this state has been added to
-     * @return the ID of the stack
+     * @return the ID of the stack iteration
      */
     public int getLastStackId() {
         return lastStackId;
     }
 
     /**
-     * Set the ID of the last stack that this state has been added to
-     * @param lastStackId ID of the stack
+     * Set the ID of the last iteration where this state has been added to the stack
+     * @param iterationId ID of the iteration
      */
-    public void setLastStackId(int lastStackId) {
-        this.lastStackId = lastStackId;
+    public void setLastStackId(int iterationId) {
+        this.lastStackId = iterationId;
+    }
+
+    /**
+     * Returns the ID of the last iteration where this state was visited
+     * @return the ID of the iteration
+     */
+    public int getLastVisitedId() {
+        return lastVisitedId;
+    }
+
+    /**
+     * Set the ID of the last iteration where this state has been visited
+     * @param iterationId ID of the iteration
+     */
+    public void setLastVisitedId(int iterationId) {
+        this.lastVisitedId = iterationId;
     }
 }

@@ -19,18 +19,18 @@ public class RegexMatcher {
      * @return true if the input is an exact match, otherwise false
      */
     public static boolean match(NFA nfa, String input) {
-        int stackId = 1;
+        int iterationId = 1;
         Stack<State> states = new Stack<>();
-        addNextStatesToStack(nfa.getStart(), states, stackId);
+        addNextStatesToStack(nfa.getStart(), states, iterationId);
 
         for (char c : input.toCharArray()) {
             Stack<State> nextStates = new Stack<>();
-            stackId++;
+            iterationId++;
 
             while (states.peek() != null) {
                 State state = states.pop();
                 if (state.getSymbol() != null && state.getSymbol() == c) {
-                    addNextStatesToStack(state.getTransition(), nextStates, stackId);
+                    addNextStatesToStack(state.getTransition(), nextStates, iterationId);
                 }
             }
             states = nextStates;
@@ -50,25 +50,29 @@ public class RegexMatcher {
     }
 
     /**
-     * Find next states from the given one following the epsilon transitions as far as possible, and add them to the stack.
-     * If a state has already been added to the current stack (stackId equals lastStackId) then it is ignored.
+     * Find next states from the given one following the epsilon transitions as far as possible,
+     * and add them to the stack. The method marks all visited states with the current iteration ID to avoid following
+     * epsilon transitions that form a cycle in the NFA. If a state has already been added to the current stack
+     * (iterationId equals lastStackId) then it is ignored.
      *
      * @param state starting state
      * @param stack stack where the states should be added
-     * @param stackId ID of the current stack
+     * @param iterationId ID of the current iteration
      */
-    private static void addNextStatesToStack(State state, Stack<State> stack, int stackId) {
+    private static void addNextStatesToStack(State state, Stack<State> stack, int iterationId) {
+        state.setLastVisitedId(iterationId);
+
         if (!state.hasEpsilonTransition()) {
-            if (stackId == state.getLastStackId()) {
+            if (iterationId == state.getLastStackId()) {
                 return;
             }
-            state.setLastStackId(stackId);
+            state.setLastStackId(iterationId);
             stack.push(state);
         } else {
             for (int i = 0; i < 2; i++) {
                 State next = state.getEpsilonTransitions()[i];
-                if (next != null) {
-                    addNextStatesToStack(next, stack, stackId);
+                if (next != null && next.getLastVisitedId() != iterationId) {
+                    addNextStatesToStack(next, stack, iterationId);
                 }
             }
         }

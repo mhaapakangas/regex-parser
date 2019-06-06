@@ -98,4 +98,14 @@ public class RegexMatcherTest {
         nfa = NFABuilder.buildNFA("abcd.*.*.e.");
         Assert.assertFalse(RegexMatcher.match(nfa, "acde"));
     }
+
+    @Test
+    public void testRecursiveKleeneStars() {
+        NFA nfa = NFABuilder.buildNFA("a**");  //Corresponding regex: (a*)*
+        Assert.assertTrue(RegexMatcher.match(nfa, "a"));
+        nfa = NFABuilder.buildNFA("a**");
+        Assert.assertTrue(RegexMatcher.match(nfa, ""));
+        nfa = NFABuilder.buildNFA("a**");
+        Assert.assertFalse(RegexMatcher.match(nfa, "b"));
+    }
 }
