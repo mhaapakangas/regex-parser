@@ -10,8 +10,15 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter regex: ");
         String regex = scanner.nextLine();
-        String prepared = InputConverter.addConcatenationChar(regex);
-        NFA nfa = NFABuilder.buildNFA(InputConverter.toPostfixNotation(prepared));
+        NFA nfa = null;
+
+        try {
+            String prepared = InputConverter.addConcatenationChar(regex);
+            nfa = NFABuilder.buildNFA(InputConverter.toPostfixNotation(prepared));
+        } catch (NullPointerException e) {
+            System.out.println("Failed to process, the regex is malformed");
+            System.exit(1);
+        }
 
         System.out.println("\nEnter a string to match: ");
         String input = scanner.nextLine();

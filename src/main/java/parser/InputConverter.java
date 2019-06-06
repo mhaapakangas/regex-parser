@@ -17,8 +17,9 @@ public class InputConverter {
      *
      * @param input the regex with concatenation characters
      * @return the regex in postfix notation
+     * @throws NullPointerException if the regex is malformed
      */
-    public static String toPostfixNotation(String input) {
+    public static String toPostfixNotation(String input) throws NullPointerException {
         Stack<Character> operatorStack = new Stack<>();
         String output = "";
 

@@ -103,4 +103,9 @@ public class InputConverterTest {
     public void toPostfixNotation10() {
         Assert.assertEquals("", InputConverter.toPostfixNotation(""));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void toPostfixNotationIncorrectRegex() {
+        InputConverter.toPostfixNotation(")");
+    }
 }

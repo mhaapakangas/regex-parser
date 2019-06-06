@@ -80,4 +80,9 @@ public class NFABuilderTest {
         State endStateA  = stateA.getTransition().getEpsilonTransitions()[1];
         Assert.assertEquals(result.getEnd(), endStateA);
     }
+
+    @Test(expected = NullPointerException.class)
+    public void testIncorrectRegex() {
+        NFABuilder.buildNFA("|");
+    }
 }

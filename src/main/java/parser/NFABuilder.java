@@ -14,8 +14,9 @@ public class NFABuilder {
      *
      * @param regex the regex in postfix notation
      * @return the NFA
+     * @throws NullPointerException if the regex is malformed
      */
-    public static NFA buildNFA(String regex) {
+    public static NFA buildNFA(String regex) throws NullPointerException {
         if (regex.isEmpty()) {
             return createEpsilonNFA();
         }
