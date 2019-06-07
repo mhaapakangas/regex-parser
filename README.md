@@ -18,6 +18,8 @@ Project for Data structures and algorithms -course.
 
 [Week 4](documentation/report-week-4.md)
 
+[Week 5](documentation/report-week-5.md)
+
 ### Instructions
 
 Compile and run the application:
