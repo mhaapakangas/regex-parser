@@ -11,5 +11,15 @@ The algorithm has two parts: the parsing of a regular expression into an NFA and
  input text matches the given regular expression. 
  
  Both *NFABuilder* and *RegexMatcher* are using the *NFA* and *State* models to represent the state machine. The
- algorithms for *InputConverter* and *NFABuilder* are based on a stack and they use the implementation from the 
+ algorithms for *InputConverter*, *NFABuilder*, and *RegexMatcher* are based on a stack and they use the implementation from the 
  *datastructures* package.
+ 
+ ### Regex parsing
+ 
+ The first step of the algorithm is to add concatenation characters to the regular expression. The algorithm loops over
+ each character of the given regex, and adds concatenation characters (`.`) to mark which expressions should be concatenated.
+ The character is added after each character of the input that is not an opening parenthesis or a pipe, and that is not
+ followed by a closing parenthesis, a pipe or a Kleene star.
+ 
+ Because the algorithm consists of a simple for loop, its time complexity if O(n) for a regex of size n. In the worst case, the
+ algorithm would add a concatenation character for each character in the given regex, it also has the space complexity of O(n).
