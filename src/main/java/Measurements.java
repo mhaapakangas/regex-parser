@@ -25,8 +25,8 @@ public class Measurements {
 
         // warm up the JVM
         for (int i = 0; i < 100000; i++) {
-            javaParser("(aaaaa*)|a", "aaaaa", true);
-            regexParser("(aaaaa*)|a", "aaaaa", true);
+            javaParser("(aaaaa*)|a", "aaaaa", true, 1);
+            regexParser("(aaaaa*)|a", "aaaaa", true, 1);
         }
 
         String regexp = "(a|aa)*b";
@@ -45,34 +45,42 @@ public class Measurements {
     }
 
     private static void runMeasurement(String regexp, String input, String text) {
-        regexParser(regexp, input, true);
-        javaParser(regexp, input, true);
+        regexParser(regexp, input, true, 1);
+        javaParser(regexp, input, true, 1);
         System.out.println(text);
-        regexParser(regexp, input, false);
-        javaParser(regexp, input, false);
+        regexParser(regexp, input, false, 10);
+        javaParser(regexp, input, false, 10);
     }
 
-    private static void regexParser(String regex, String input, Boolean quiet) {
-        Instant start = Instant.now();
-        String prepared = InputConverter.addConcatenationChar(regex);
-        NFA nfa = NFABuilder.buildNFA(InputConverter.toPostfixNotation(prepared));
-        boolean result = RegexMatcher.match(nfa, input);
-        Instant finish = Instant.now();
-        long timeElapsed = Duration.between(start, finish).toNanos();
+    private static void regexParser(String regex, String input, Boolean quiet, int n) {
+        long totalTime = 0;
+        for (int i = 0; i < n; i++) {
+            Instant start = Instant.now();
+            String prepared = InputConverter.addConcatenationChar(regex);
+            NFA nfa = NFABuilder.buildNFA(InputConverter.toPostfixNotation(prepared));
+            RegexMatcher.match(nfa, input);
+            Instant finish = Instant.now();
+            totalTime += Duration.between(start, finish).toNanos();
+        }
+
         if (!quiet) {
-            System.out.println("Regex-parser - is a match: " + result + ", time: " + timeElapsed / 1000000.0 + "ms");
+            System.out.println("Regex-parser - time: " + String.format("%.3f", totalTime / 1000000.0 / n) + "ms");
         }
     }
 
-    private static void javaParser(String regex, String input, Boolean quiet) {
-        Instant start = Instant.now();
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
-        boolean result = matcher.find();
-        Instant finish = Instant.now();
-        long timeJava = Duration.between(start, finish).toNanos();
+    private static void javaParser(String regex, String input, Boolean quiet, int n) {
+        long totalTime = 0;
+        for (int i = 0; i < n; i++) {
+            Instant start = Instant.now();
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(input);
+            matcher.find();
+            Instant finish = Instant.now();
+            totalTime += Duration.between(start, finish).toNanos();
+        }
+
         if (!quiet) {
-            System.out.println("Java regex - is a match: " + result + ", time: " + timeJava / 1000000.0 + "ms");
+            System.out.println("Native Java parser - time: " +  String.format("%.3f", totalTime / 1000000.0 / n)   + "ms");
         }
     }
 }
