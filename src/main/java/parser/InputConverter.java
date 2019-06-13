@@ -21,7 +21,8 @@ public class InputConverter {
      */
     public static String toPostfixNotation(String input) throws NullPointerException {
         Stack<Character> operatorStack = new Stack<>();
-        String output = "";
+        char[] output = new char[input.length()];
+        int outputIndex = 0;
 
         for (char c : input.toCharArray()) {
             switch (c) {
@@ -30,7 +31,7 @@ public class InputConverter {
                 case '|':
                     char[] lowerPrecedenceChars = getLowerPrecedenceChars(c);
                     while (!operatorStack.isEmpty() && !isOperatorOneOf(lowerPrecedenceChars, operatorStack.peek())) {
-                        output += operatorStack.pop();
+                        output[outputIndex++] = operatorStack.pop();
                     }
                     operatorStack.push(c);
                     break;
@@ -39,20 +40,20 @@ public class InputConverter {
                     break;
                 case ')':
                     while (operatorStack.peek() != '(') {
-                        output += operatorStack.pop();
+                        output[outputIndex++] = operatorStack.pop();
                     }
                     operatorStack.pop();
                     break;
                 default:
-                    output += c;
+                    output[outputIndex++] = c;
             }
         }
 
         while (!operatorStack.isEmpty()) {
-            output += operatorStack.pop();
+            output[outputIndex++] = operatorStack.pop();
         }
 
-        return output;
+        return new String(output, 0, outputIndex);
     }
 
     private static char[] getLowerPrecedenceChars(char c) {
@@ -89,21 +90,23 @@ public class InputConverter {
         if (input.isEmpty()) {
             return "";
         }
+        char[] output = new char[2 * input.length()];
+        int outputIndex = 0;
 
-        String output = "";
         for (int i = 0; i < input.length() - 1; i++) {
             char c = input.charAt(i);
-            output += c;
+            output[outputIndex++] = c;
             if (c == '(' || c == '|') {
                 continue;
             }
 
             char nextChar = input.charAt(i + 1);
             if (nextChar != ')' && nextChar != '|' && nextChar != '*') {
-                output += '.';
+                output[outputIndex++] = '.';
             }
         }
-        output += input.charAt(input.length() - 1);
-        return output;
+        output[outputIndex++] = input.charAt(input.length() - 1);
+
+        return new String(output, 0, outputIndex);
     }
 }
