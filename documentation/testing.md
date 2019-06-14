@@ -3,71 +3,99 @@
 ## Performance testing
 
 The tests are measuring the time it takes to parse a regular expression and check for a match. The algorithm
-performance is compared to the native Java regex and to grep. 
- 
+performance is compared to the native Java regex. 
+
+Both Thompson's algorithm and the Java native algorithm are based on an NFA to represent the regular expression, but
+they have a different strategy for finding if an input matches the regex. Thompson's algorithm traverses the graph once,
+holding the set of all reachable states at the same time. The Java native algorithm uses backtracking. It tries to follow
+a single path and backtracks if it does not find a match.
+
+Performances were measured for two different regex patterns: `(a|aa)*b` and `(a*a*)*b`.
+Each regex pattern is tested against two different types of input, one that matches the regular expressions and one
+that matches except for the last character.
+The matching input is of the form `(a^n)b`, n being the number of repetitions of `a`. For `n = 3` the input will be `aaab`.
+Similarly, the non matching pattern is of the form `(a^n)c`.
+
+## Results
+
+The two different regex pattens were tested against inputs of different lengths ranging from `n = 10` to `n = 1000`.
+
+#### Regex: `(a|aa)*b`
+
+**Input:** `(a^n)b`:
+
+|n| Thompson | Java native|
+|---:|---:|---:|
+| 10 | 0,003 | 0,009 | 
+| 50 | 0,021 | 0,016 | 
+| 100 | 0,020 | 0,016 |
+| 200 | 0,019 | 0,016 |
+| 500 | 0,046 | 0,030 |
+| 1000 | 0,106 | 0,050 |
+
+**Input:** `(a^n)c`:
+
+|n| Thompson | Java native|
+|---:|---:|---:|
+| 10 | 0,003 | 0,014 | 
+| 50 | 0,005 | 0,033 | 
+| 100 | 0,011 | 0,027 |
+| 200 | 0,024 | 0,051 |
+| 500 | 0,056 | 0,233 |
+| 1000 | 0,071 | 0,251 |
+
+
+Thompson's algorithm behaves similarly for the two different inputs. The processing time grows linearly with the input
+length. In comparison, the Java algorithm performs worse when the input almost matches the regular expression. When the
+input is a match, the correct path is found quickly. However, because the input `(a^n)c` matches the input except for the
+last character, the algorithm will need to backtrack until all paths have been explored.
+
+
+#### Regex: `(a*a*)*b`
+
+**Input:** `(a^n)b`:
+
+|n| Thompson | Java native|
+|---:|---:|---:|
+| 10 | 0,003 | 0,004 | 
+| 50 | 0,008 | 0,004 | 
+| 100 | 0,010 | 0,003 |
+| 200 | 0,012 | 0,006 |
+| 500 | 0,047 | 0,011 |
+| 1000 | 0,088 | 0,013 |
+
+**Input:** `(a^n)c`:
+
+|n| Thompson | Java native|
+|---:|---:|---:|
+| 10 | 0,005 | 0,034 |
+| 50 | 0,005 | 1,356 |
+| 100 | 0,011 | 8,822 | 
+| 200 | 0,016 | 74,066 |
+| 500 | 0,029 | 1150,010 |
+| 1000 | 0,052 | 8881,641 |
+
+Once again Thompson's algorithm performs similarly for the two different inputs. It's processing time also grows
+linearly with the input length in this case. The Java algorithm, however, gives significantly worse results with an almost
+matching input. The reason is that the Kleene stars from the regex pattern introduce so many paths that the algorithm
+has to traverse.
+
+
+In the best case scenario, the Java native algorithm performs better than Thompson's algorithm. However, there are so-called
+pathological regular expressions that perform very slowly for the Java algorithm. Thompson's algorithm does not suffer from
+the same problem.
+
 ## Performance Measurements
 
-The performances of the implementation and of the native Java regex matchers can be measured using the following command:
+The performances of the Thompson's algorithm implementation and the native Java regex matchers can be measured
+using the following command:
 
 ```
 mvn compile exec:java -Dexec.mainClass=Measurements -Dexec.args="50"
 ```
 
-The class takes as an argument the length of the regular expressions that should be given to the regex matchers. Regular 
-expressions with different properties are built and tested sequentially with both implementations.
-
-Measurements for the same regular expressions using grep can be made with the following command:
-
-```
-./performance-testing/measurement.sh 50
-```
-
-The argument also represents the length of the generated regular expressions.
-
-## Results
-
-Performances were measured for two different regex patterns.
-The input string is always following the ![a^n](resources/an.png) pattern.
-
-One of the regular expression is following the ![a^n](resources/an.png) pattern.
-This is a straight forward match and should be fast to compute with any implementation.
-The other regular expression is following the ![(a*)^n a^n](resources/a*an.png) pattern.
-This pattern creates many more states in the NFA and many of them will be valid at all time, thus creating complexity.
-
-### First regex pattern
-
-All the results are in milliseconds.
-
-|n| Own implementation | Java native| Grep |
-|---:|---:|---:|---:|
-| 100 | 0 | 0 | 7 |
-| 500 | 0 | 0 | 9 |
-| 1000 | 1 | 0 | 10 |
-| 20000 | 275 | 218 | out of memory |
-| 50000 | 1528 | 1263 | out of memory |
-
-The algorithm is slightly slower than the native Java one but seems to grow at the same speed.
-Grep does not seem to be able to match long regular expressions.
-
-### Second regex pattern
-
-|n| Own implementation | Java native| Grep |
-|---:|---:|---:|---:|
-| 5 | 0 | 0 | 7 |
-| 10 | 0 | 0 | 7 |
-| 12 | 0 | 8 | 7 |
-| 15 | 0 | 52 | 7 |
-| 20 | 1 | 2695 | 7 |
-| 50 | 4 | over 10s | 7 |
-| 100 | 16 | over 10s | 15 |
-| 500 | 877 | over 10s | 545 |
-| 1000 | 7637 | over 10s | 3970 |
-
-Because the native Java implementation uses backtracking when traversing the NFA, its performances deteriorate quickly
-with this regex pattern. The implemented algorithm avoids backtracking by keeping tracks of all possible states of the
-NFA matching the input.
-
-Even though it is slower than Grep, the measured values seem to grow at the same rate.
+The argument represents the size of the generated inputs.
 
 ## Sources
 - [Russ Cox: Regular Expression Matching Can Be Simple And Fast](https://swtch.com/~rsc/regexp/regexp1.html)
+- [Regular Expressions in Java](http://www.amygdalum.net/en/efficient-regular-expressions-java.html)
