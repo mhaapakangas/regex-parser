@@ -1,33 +1,32 @@
 #!/usr/bin/env bash
 
-regex=""
-input=""
+regex="\(a\|aa\)*b"
+inputBase=""
 
 if [ "$1" == "" ]; then
-    echo "Regex size missing"
+    echo "Input size missing"
     exit 1
 fi
 
 i=1
 while [ "$i" -le "$1" ]; do
-    regex="a*${regex}a"
-    input="${input}a"
+    inputBase="${inputBase}a"
     i=$((i + 1))
 done
 
-echo "Regex: (a*)^n a^n, Input: a^n, n = $1"
+echo "Regex: (a|aa)*b, Input: a^nb, n = $1"
+input="${inputBase}b"
+time for i in {1..10}; do (echo ${input} | grep -c "${regex}"); done
 
-time (echo ${input} | grep "${regex}")
+echo "Regex: (a|aa)*b, Input: a^nc, n = $1"
+input="${inputBase}c"
+time for i in {1..10}; do (echo ${input} | grep -c "${regex}"); done
 
-regex=""
-input=""
-i=1
-while [ "$i" -le "$1" ]; do
-    regex="${regex}a"
-    input="${input}a"
-    i=$((i + 1))
-done
+regex="\(a*a*\)*b"
+echo "Regex: (a*a*)*b, Input: a^nb, n = $1"
+input="${inputBase}b"
+time for i in {1..10}; do (echo ${input} | grep -c "${regex}"); done
 
-echo "Regex: a^n, Input: a^n, n = $1"
-
-time (echo ${input} | grep "${regex}")
+echo "Regex: (a*a*)*b, Input: a^nc, n = $1"
+input="${inputBase}c"
+time for i in {1..10}; do (echo ${input} | grep -c "${regex}"); done
