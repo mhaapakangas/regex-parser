@@ -19,6 +19,8 @@ Similarly, the non matching pattern is of the form `(a^n)c`.
 ## Results
 
 The two different regex pattens were tested against inputs of different lengths ranging from `n = 10` to `n = 1000`.
+Each result is the average of 100 executions, except for the result marked with * which is the average of 10 executions.
+All the times are in milliseconds.
 
 #### Regex: `(a|aa)*b`
 
@@ -73,7 +75,7 @@ last character, the algorithm will need to backtrack until all paths have been e
 | 100 | 0,011 | 8,822 | 
 | 200 | 0,016 | 74,066 |
 | 500 | 0,029 | 1150,010 |
-| 1000 | 0,052 | 8881,641 |
+| 1000 | 0,052 | 8881,641* |
 
 Once again Thompson's algorithm performs similarly for the two different inputs. It's processing time also grows
 linearly with the input length in this case. The Java algorithm, however, gives significantly worse results with an almost
