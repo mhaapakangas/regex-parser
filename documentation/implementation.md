@@ -65,5 +65,17 @@ The algorithm has two parts: the parsing of a regular expression into an NFA and
  The stacks holding the current and next set of reachable states cannot have duplicates, therefore the space complexity of the
  algorithm is O(n).
  
+ ## Limitations and future improvements
+ 
+ The algorithm only supports a limited set of operators: `(`, `)`, `*` and `|`. Additional operators such as `?` and `+` would be easy
+ to add in the future.
+ Escaping characters is not currently possible. Because of this limitation, operator characters cannot be used as regular characters
+ in regular expressions or inputs.
+ The algorithm is also using the `.` character as the concatenation operator. As a result, this character cannot be used in regexes or
+ input either. Another character could be chosen as the concatenation operator instead, but then it could not be used as a regular character.
+ 
+ The algorithm could be improved further by transforming the NFA into a DFA, which would reduce the amount of states in the state machine.
+ 
  ### References
  - [Wikipedia: Thompson's construction](https://en.wikipedia.org/wiki/Thompson%27s_construction)
+ - [Russ Cox: Regular Expression Matching Can Be Simple And Fast](https://swtch.com/~rsc/regexp/regexp1.html)
