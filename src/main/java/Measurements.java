@@ -45,11 +45,13 @@ public class Measurements {
     }
 
     private static void runMeasurement(String regexp, String input, String text) {
-        regexParser(regexp, input, true, 1);
-        javaParser(regexp, input, true, 1);
+        // Some more warm up
+        regexParser(regexp, input, true, 10000);
+        javaParser(regexp, input, true, 10000);
         System.out.println(text);
-        regexParser(regexp, input, false, 10);
-        javaParser(regexp, input, false, 10);
+        // measurements
+        regexParser(regexp, input, false, 10000);
+        javaParser(regexp, input, false, 10000);
     }
 
     private static void regexParser(String regex, String input, Boolean quiet, int n) {
