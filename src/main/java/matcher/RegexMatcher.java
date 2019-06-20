@@ -51,9 +51,9 @@ public class RegexMatcher {
 
     /**
      * Find next states from the given one following the epsilon transitions as far as possible,
-     * and add them to the stack. The method marks all visited states with the current iteration ID to avoid following
-     * epsilon transitions that form a cycle in the NFA. If a state has already been added to the current stack
-     * (iterationId equals lastStackId) then it is ignored.
+     * and add reached states to the stack. The method marks all visited states with the current iteration ID to avoid following
+     * epsilon transitions that form a cycle in the NFA. Because of the way the NFA is built, this also prevents
+     * multiple additions of the same state to the stack.
      *
      * @param state starting state
      * @param stack stack where the states should be added
@@ -63,10 +63,6 @@ public class RegexMatcher {
         state.setLastVisitedId(iterationId);
 
         if (!state.hasEpsilonTransition()) {
-            if (iterationId == state.getLastStackId()) {
-                return;
-            }
-            state.setLastStackId(iterationId);
             stack.push(state);
         } else {
             for (int i = 0; i < 2; i++) {

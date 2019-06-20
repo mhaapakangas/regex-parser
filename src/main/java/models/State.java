@@ -7,7 +7,6 @@ package models;
  * epsilon transitions.
  */
 public class State {
-    private int lastStackId;
     private int lastVisitedId;
     private boolean isEnd;
     private State transition;
@@ -68,22 +67,6 @@ public class State {
 
     public boolean hasEpsilonTransition() {
         return this.epsilonTransitions[0] != null;
-    }
-
-    /**
-     * Returns the ID of the last stack that this state has been added to
-     * @return the ID of the stack iteration
-     */
-    public int getLastStackId() {
-        return lastStackId;
-    }
-
-    /**
-     * Set the ID of the last iteration where this state has been added to the stack
-     * @param iterationId ID of the iteration
-     */
-    public void setLastStackId(int iterationId) {
-        this.lastStackId = iterationId;
     }
 
     /**
