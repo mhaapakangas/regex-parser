@@ -8,7 +8,7 @@ Project for Data structures and algorithms -course.
 ### [Implementation document](documentation/implementation.md)
 ### [Testing document](documentation/testing.md)
 ### [User guide](documentation/user-guide.md)
-### [JavaDoc](target/site/apidocs/index.html)
+### [JavaDoc](https://mhaapakangas.github.io/regex-parser)
 
 ### Progress reports
 
